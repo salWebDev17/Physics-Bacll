@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>មេរៀនរូបមន្តទែម៉ូឌីណាមិច និងលំហាត់អនុវត្ត</title>
+    
+    <!-- MathJax -->
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <!-- Khmer Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Khmer:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e67e22;
+            --success-color: #27ae60;
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --text-color: #333;
+            --border-color: #e0e0e0;
+        }
+
+        body {
+            font-family: 'Noto Sans Khmer', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.8;
+            margin: 0;
+            padding: 0;
+            font-size: 16px;
+        }
+
+        header {
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            color: white;
+            padding: 2rem 1rem;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.2rem;
+            font-weight: 700;
+        }
+
+        header p {
+            margin-top: 10px;
+            font-size: 1.1rem;
+            opacity: 0.95;
+        }
+
+        nav {
+            background-color: var(--card-bg);
+            padding: 0.8rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        nav a {
+            color: var(--primary-color);
+            text-decoration: none;
+            margin: 0 10px;
+            font-weight: 700;
+            padding: 5px 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+            display: inline-block;
+        }
+
+        nav a:hover {
+            background-color: #eaf4fc;
+            color: var(--secondary-color);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .section-card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.5rem 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border: 1px solid var(--border-color);
+        }
+
+        h2 {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 10px;
+            margin-top: 0;
+            font-size: 1.5rem;
+        }
+
+        h3 {
+            color: #2c3e50;
+            font-size: 1.15rem;
+            margin-top: 1.5rem;
+        }
+
+        ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        ul li {
+            margin-bottom: 0.8rem;
+            position: relative;
+            padding-left: 1.5rem;
+        }
+
+        ul li::before {
+            content: "•";
+            color: var(--secondary-color);
+            font-weight: bold;
+            display: inline-block;
+            width: 1em;
+            margin-left: -1em;
+        }
+
+        .formula-box {
+            background-color: #f1f8ff;
+            border-left: 4px solid var(--secondary-color);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0 8px 8px 0;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.95rem;
+        }
+
+        th, td {
+            border: 1px solid var(--border-color);
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f4f6f8;
+            color: var(--primary-color);
+            font-weight: 700;
+        }
+
+        tr:nth-child(even) {
+            background-color: #fafbfc;
+        }
+
+        /* ===== ផ្នែកលំហាត់អនុវត្ត ===== */
+        .exercise-header {
+            background: linear-gradient(135deg, #e67e22 0%, #f39c12 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 12px 12px 0 0;
+            margin: -1.5rem -2rem 1.5rem -2rem;
+            text-align: center;
+        }
+
+        .exercise-header h2 {
+            color: white;
+            border-bottom: none;
+            margin: 0;
+        }
+
+        .exercise-header p {
+            margin: 5px 0 0 0;
+            opacity: 0.95;
+        }
+
+        .exercise-item {
+            background-color: #fdfdfd;
+            border: 1px solid var(--border-color);
+            border-left: 4px solid var(--accent-color);
+            border-radius: 8px;
+            padding: 1.2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .exercise-item h4 {
+            color: var(--accent-color);
+            margin-top: 0;
+            font-size: 1.1rem;
+        }
+
+        .exercise-question {
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 0.8rem;
+        }
+
+        .btn-toggle {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: 'Noto Sans Khmer', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 700;
+            transition: all 0.3s;
+        }
+
+        .btn-toggle:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        .btn-toggle.active {
+            background-color: var(--success-color);
+        }
+
+        .answer-box {
+            display: none;
+            background-color: #f0f9f4;
+            border-left: 4px solid var(--success-color);
+            border-radius: 0 8px 8px 0;
+            padding: 1rem;
+            margin-top: 1rem;
+            animation: fadeIn 0.4s ease-in;
+        }
+
+        .answer-box.show {
+            display: block;
+        }
+
+        .answer-box h5 {
+            color: var(--success-color);
+            margin-top: 0;
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .answer-step {
+            margin-bottom: 0.8rem;
+            padding-left: 0.5rem;
+        }
+
+        .answer-step strong {
+            color: #2c3e50;
+        }
+
+        .final-answer {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            border-radius: 6px;
+            padding: 8px 12px;
+            margin-top: 1rem;
+            font-weight: 700;
+            color: #155724;
+            text-align: center;
+        }
+
+        .difficulty {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-left: 10px;
+        }
+
+        .easy { background-color: #d4edda; color: #155724; }
+        .medium { background-color: #fff3cd; color: #856404; }
+        .hard { background-color: #f8d7da; color: #721c24; }
+
+        @media (max-width: 600px) {
+            .section-card { padding: 1rem; }
+            .exercise-header { margin: -1rem -1rem 1rem -1rem; padding: 1rem; }
+            header h1 { font-size: 1.6rem; }
+            body { font-size: 15px; }
+            nav a { margin: 0 3px; font-size: 0.85rem; padding: 4px 6px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>មេរៀនរូបមន្តទែម៉ូឌីណាមិច</h1>
+        <p>រូបមន្ត និមិត្តសញ្ញា ការបំបែកខ្នាត និងលំហាត់អនុវត្ត</p>
+    </header>
+
+    <nav>
+        <a href="#section1">១. កម្ពាំង</a>
+        <a href="#section2">២. ថាមពលក្នុង</a>
+        <a href="#section3">៣. ច្បាប់ទី១</a>
+        <a href="#section4">៤. និមិត្តសញ្ញា</a>
+        <a href="#section5">៥. ខ្នាត</a>
+        <a href="#exercises">📝 លំហាត់</a>
+    </nav>
+
+    <div class="container">
+
+        <!-- ផ្នែកទី ១ -->
+        <div class="section-card" id="section1">
+            <h2>១. រូបមន្តកម្ពាំង/ការងារ (\(W\)) តាមករណីនីមួយៗ</h2>
+            
+            <h3>1. ករណីសំពាធថេរ (\(P = \text{ថេរ}\) - Isobaric Process):</h3>
+            <div class="formula-box">
+                \[ W = F \cdot d \cdot \cos\theta \]
+                <p>(បើ \(\theta = 0^\circ\) នោះ \(W = F \Delta x\))</p>
+                \[ W = P \Delta V = P(V_2 - V_1) \]
+            </div>
+
+            <h3>2. ករណីសំពាធប្រែប្រួលលីនេអ៊ែរ (Linear P-V Diagram):</h3>
+            <div class="formula-box">
+                \[ W = P_1 \Delta V + \frac{1}{2} \Delta P \Delta V \]
+                \[ W = P_{av} \Delta V = \left(\frac{P_1 + P_2}{2}\right) (V_2 - V_1) \]
+            </div>
+
+            <h3>3. ករណីសីតុណ្ហភាពថេរ (\(T = \text{ថេរ}\) - Isothermal Process):</h3>
+            <div class="formula-box">
+                \[ W = nRT \ln\left(\frac{V_2}{V_1}\right) = nRT \ln\left(\frac{P_1}{P_2}\right) \]
+            </div>
+
+            <h3>4. ករណីមាឌថេរ (\(V = \text{ថេរ}\) - Isochoric Process):</h3>
+            <div class="formula-box">
+                \[ W = 0 \quad \text{(ព្រោះ } \Delta V = 0) \]
+            </div>
+        </div>
+
+        <!-- ផ្នែកទី ២ -->
+        <div class="section-card" id="section2">
+            <h2>២. រូបមន្តថាមពលក្នុងនៃឧស្ម័នម៉ូណូអាតូមិច (\(U\) និង \(\Delta U\))</h2>
+
+            <h3>1. ថាមពលក្នុងសរុប (\(U\)):</h3>
+            <div class="formula-box">
+                \[ U = \frac{3}{2} nRT = \frac{3}{2} N k_B T = \frac{3}{2} PV \]
+            </div>
+
+            <h3>2. បម្រែបម្រួលថាមពលក្នុង (\(\Delta U\)):</h3>
+            <div class="formula-box">
+                \[ \Delta U = \frac{3}{2} nR \Delta T = \frac{3}{2}(P_2 V_2 - P_1 V_1) \]
+                <ul>
+                    <li>បើ \(T = \text{ថេរ}\): \(\Delta U = 0\)</li>
+                    <li>បើ \(P = \text{ថេរ}\): \(\Delta U = \frac{3}{2} P \Delta V = \frac{3}{2} W\)</li>
+                    <li>បើជាលំនឹងខួប (Cyclic): \(\Delta U = 0\)</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- ផ្នែកទី ៣ -->
+        <div class="section-card" id="section3">
+            <h2>៣. រូបមន្តច្បាប់ទី១ទែម៉ូឌីណាមិច និងអនុសញ្ញាសញ្ញា</h2>
+
+            <div class="formula-box" style="text-align: center; font-size: 1.5rem;">
+                \[ \Delta U = Q + W \]
+            </div>
+
+            <h3>អនុសញ្ញាសញ្ញា (Sign Conventions):</h3>
+            <ul>
+                <li><strong>បរិមាណកំដៅ (\(Q\)):</strong> \(Q > 0 (+)\) ស្រូបកំដៅ; \(Q < 0 (-)\) បញ្ចេញកំដៅ</li>
+                <li><strong>ថាមពលក្នុង (\(\Delta U\)):</strong> \(\Delta U > 0 (+)\) កើនឡើង; \(\Delta U < 0 (-)\) ថយចុះ</li>
+                <li><strong>កម្ពាំង (\(W\)):</strong> \(W > 0 (+)\) ប្រព័ន្ធទទួលកម្ពាំង (បង្រួមមាឌ); \(W < 0 (-)\) ប្រព័ន្ធធ្វើកម្ពាំង (រីកមាឌ)</li>
+            </ul>
+        </div>
+
+        <!-- ផ្នែកទី ៤ -->
+        <div class="section-card" id="section4">
+            <h2>៤. ឈ្មោះនិមិត្តសញ្ញា និងខ្នាត SI</h2>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>និមិត្តសញ្ញា</th>
+                        <th>ឈ្មោះ</th>
+                        <th>ខ្នាត SI</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>\(W\)</td><td>កម្ពាំង / ការងារ</td><td>ស៊ូល (\(\text{J}\))</td></tr>
+                    <tr><td>\(Q\)</td><td>បរិមាណកំដៅ</td><td>ស៊ូល (\(\text{J}\))</td></tr>
+                    <tr><td>\(U, \Delta U\)</td><td>ថាមពលក្នុង / បម្រែបម្រួល</td><td>ស៊ូល (\(\text{J}\))</td></tr>
+                    <tr><td>\(P\)</td><td>សំពាធ</td><td>ប៉ាស្កាល់ (\(\text{Pa}\))</td></tr>
+                    <tr><td>\(V\)</td><td>មាឌ</td><td>ម៉ែត្រគូប (\(\text{m}^3\))</td></tr>
+                    <tr><td>\(T\)</td><td>សីតុណ្ហភាពដាច់ខាត</td><td>កែលវិន (\(\text{K}\))</td></tr>
+                    <tr><td>\(n\)</td><td>ចំនួនម៉ូល</td><td>ម៉ូល (\(\text{mol}\))</td></tr>
+                    <tr><td>\(R\)</td><td>ថេរឧស្ម័នបរិសុទ្ធ</td><td>\(8.314 \, \text{J/(mol}\cdot\text{K)}\)</td></tr>
+                    <tr><td>\(k_B\)</td><td>ថេរបុលស្មាន់</td><td>\(1.38 \times 10^{-23} \, \text{J/K}\)</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- ផ្នែកទី ៥ -->
+        <div class="section-card" id="section5">
+            <h2>៥. ការបំបែកខ្នាត និងរូបមន្តបំលែងខ្នាត</h2>
+
+            <h3>ការបំបែកខ្នាតគ្រឹះ SI:</h3>
+            <div class="formula-box">
+                \[ 1 \, \text{J} = 1 \, \text{N} \cdot \text{m} = 1 \, \text{Pa} \cdot \text{m}^3 = 1 \, \text{kg} \cdot \text{m}^2/\text{s}^2 \]
+                \[ 1 \, \text{Pa} = 1 \, \text{N/m}^2 \]
+            </div>
+
+            <h3>ខ្នាតកំដៅ និងថាមពល:</h3>
+            <ul>
+                <li>\(1 \, \text{kJ} = 1000 \, \text{J}\)</li>
+                <li>\(1 \, \text{cal} \approx 4.184 \, \text{J}\)</li>
+                <li>\(1 \, \text{L} \cdot \text{atm} \approx 101.3 \, \text{J}\)</li>
+            </ul>
+
+            <h3>ខ្នាតសំពាធ:</h3>
+            <ul>
+                <li>\(1 \, \text{atm} = 1.013 \times 10^5 \, \text{Pa} = 760 \, \text{mmHg}\)</li>
+                <li>\(1 \, \text{bar} = 10^5 \, \text{Pa}\)</li>
+            </ul>
+
+            <h3>ខ្នាតមាឌ:</h3>
+            <ul>
+                <li>\(1 \, \text{m}^3 = 1000 \, \text{L}\)</li>
+                <li>\(1 \, \text{L} = 10^{-3} \, \text{m}^3 = 1000 \, \text{cm}^3\)</li>
+            </ul>
+
+            <h3>ខ្នាតសីតុណ្ហភាព:</h3>
+            <ul>
+                <li>\(T(\text{K}) = t(^\circ\text{C}) + 273.15\)</li>
+                <li>\(\Delta T(\text{K}) = \Delta t(^\circ\text{C})\)</li>
+            </ul>
+        </div>
+
+        <!-- ===== ផ្នែកលំហាត់អនុវត្ត ===== -->
+        <div class="section-card" id="exercises" style="padding-top: 1.5rem;">
+            <div class="exercise-header">
+                <h2>📝 លំហាត់អនុវត្តរំឭកមេរៀន</h2>
+                <p>ចុចប៊ូតុង "បង្ហាញចម្លើយ" ដើម្បីពិនិត្យដំណោះស្រាយលម្អិត</p>
+            </div>
+
+            <!-- លំហាត់ទី ១ -->
+            <div class="exercise-item">
+                <h4>លំហាត់ទី ១ <span class="difficulty easy">ងាយ</span></h4>
+                <p class="exercise-question">
+                    ឧស្ម័នមួយត្រូវបានបង្រួមក្នុងសំពាធថេរ \(P = 2 \times 10^5 \, \text{Pa}\) ពីមាឌ \(V_1 = 5 \, \text{L}\) មក \(V_2 = 2 \, \text{L}\)។ 
+                    ចូរគណនាកម្ពាំង \(W\) ដែលប្រព័ន្ធទទួល។
+                </p>
+                <button class="btn-toggle" onclick="toggleAnswer(this)">បង្ហាញចម្លើយ</button>
+                <div class="answer-box">
+                    <h5>ដំណោះស្រាយ៖</h5>
+                    <div class="answer-step">
+                        <strong>ជំហានទី ១៖</strong> បំលែងមាឌពីលីត្រ ទៅ ម៉ែត្រគូប<br>
+                        \(V_1 = 5 \, \text{L} = 5 \times 10^{-3} \, \text{m}^3\)<br>
+                        \(V_2 = 2 \, \text{L} = 2 \times 10^{-3} \, \text{m}^3\)
+                    </div>
+                    <div class="answer-step">
+                        <strong>ជំហានទី ២៖</strong> គណនាបម្រែបម្រួលមាឌ<br>
+                        \(\Delta V = V_2 - V_1 = (2 - 5) \times 10^{-3} = -3 \times 10^{-3} \, \text{m}^3\)
+                    </div>
+                    <div class="answer-step">
+                        <strong>ជំហានទី ៣៖</strong> ប្រើរូបមន្តកម្ពាំងករណីសំពាធថេរ<br>
+                        \(W = P \Delta V = (2 \times 10^5)(-3 \times 10^{-3}) = -600 \, \text{J}\)
+                    </div>
+                    <div class="final-answer">
+                        ចម្លើយ៖ \(W = -600 \, \text{J}\) (សញ្ញាដក បង្ហាញថាប្រព័ន្ធទទួលកម្ពាំងពីបរិស្ថាន ព្រោះវាត្រូវបានបង្រួមមាឌ)
+                    </div>
+                </div>
+            </div>
+
+            <!-- លំហាត់ទី ២ -->
+            <div class="exercise-item">
+                <h4>លំហាត់ទី ២ <span class="difficulty easy">ងាយ</span></h4>
+                <p class="exercise-question">
+                    គណនាថាមពលក្នុងសរុប \(U\) នៃឧស្ម័នម៉ូណូអាតូមិច ចំនួន \(n = 2 \, \text{mol}\) នៅសីតុណ្ហភាព \(T = 300 \, \text{K}\)។ 
+                    (យក \(R = 8.314 \, \text{J/(mol}\cdot\text{K)}\))
+                </p>
+                <button class="btn-toggle" onclick="toggleAnswer(this)">បង្ហាញចម្លើយ</button>
+                <div class="answer-box">
+                    <h5>ដំណោះស្រាយ៖</h5>
+                    <div class="answer-step">
+                        <strong>ជំហានទី ១៖</strong> ប្រើរូបមន្តថាមពលក្នុងឧស្ម័នម៉ូណូអាតូមិច<br>
+                        \(U = \frac{3}{2} nRT\)
+                    </div>
+                    <div class="answer-step">
+                        <strong>ជំហានទី ២៖</strong> ជំនួសតម្លៃ<br>
+                        \(U = \frac{3}{2} \times 2 \times 8.314 \times 300\)
+                    </div>
+                    <div class="answer-step">
+                        <strong>ជំហានទី ៣៖</strong> គណនា<br>
+                        \(U = 3 \times 8.314 \times 300 = 7482.6 \, \text{J}\)
+                    </div>
+                    <div class="final-answer">
+                        ចម្លើយ៖ \(U \approx 7.48 \, \text{kJ}\)
+                    </div>
+                </div>
+            </div>
+
+            <!-- លំហាត់ទី ៣ -->
+            <div class="exercise-item">
+                <h4>លំហាត់ទី ៣ <span class="difficulty medium">មធ្យម</span></h4>
+                <p class="exercise-question">
+                    ឧស្ម័នមួយរីកមាឌដោយសីតុណ្ហភាពថេរ (Isothermal) ពី \(V_1 = 2 \, \text{L}\) ទៅ \(V_2 = 8 \, \text{L}\) 
+                    នៅសីតុណ្ហភាព \(T = 400 \, \text{K}\)។ ឧស្ម័នមានចំនួន \(n = 1.5 \, \text{mol}\)។ 
+                    ចូរគណនាកម្ពាំង \(W\) ដែលឧស្ម័នធ្វើ។
+                </p>
+                <button class="btn-toggle" onclick="toggleAnswer(this)">បង្ហាញចម្លើយ</button>
+                <div class="answer-box">
+                    <h5>ដំណោះស្រាយ៖</h5>
+                    <div class="answer-step">
+                        <strong>ជំហានទី ១៖</strong> ប្រើរូបមន្តកម្ពាំង Isothermal<br>
+                        \(W = nRT \ln\left(\frac{V_2}{V_1}\right)\)
+                    </div>
+                    <div class="answer-step">
+                        <strong>ជំហានទី ២៖</strong> ជំនួសតម្លៃ<br>
+                        \(W = 1.5 \times 8.314 \times 400 \times \ln\left(\frac{8}{2}\right)\)
+                    </div>
+                    <div class="answer-step">
+                        <strong>ជំហានទី ៣៖</strong> គណនា \(\ln(4) \approx 1.386\)<br>
+                        \(W = 1.5 \times 8.314 \times 400 \times 1.386\)
+                    </div>
+                    <div class="answer-step">
+                        <strong>ជំហានទី ៤៖</strong> គណនាចុងក្រោយ<br>
+                        \(W = 4988.4 \times 1.386 \approx 6914 \, \text{J}\)
+                    </div>
+                    <div class="final-answer">
+                        ចម្លើយ៖ \(W \approx 6.91 \, \text{kJ}\) (វិជ្ជមាន ព្រោះឧស្ម័នរីកមាឌ ធ្វើកម្ពាំងលើបរិស្ថាន)
+                    </div>
+                </div>
+            </div>
+
+            <!-- លំហាត់ទី ៤ -->
+            <div class="exercise-item">
+                <h4>លំហាត់ទី ៤ <span class="difficulty medium">មធ្យម</span></h4>
+                <p class="exercise-question">
+                    ឧស្ម័នមួយទទួលកំដៅ \(Q = 800 \, \text{J}\) ពីបរិស្ថាន ហើយធ្វើកម្ពាំង \(W = 300 \, \text{J}\) ទៅលើបរិស្ថាន។ 
+                    ចូរគណនាបម្រែបម្រួលថាមពលក្នុង \(\Delta U\)។
+                </p>
+                <button class="btn-toggle" onclick="toggleAnswer(this)">បង្ហាញចម្លើយ</button>
+                <div class="answer-box">
+                    <h5>ដំណោះស្រាយ៖</h5>
+                    <div class="answer-step">
+                        <strong>ជំហានទី ១៖</strong> កំណត់សញ្ញាតាមអនុសញ្ញា<br>
+                        \(Q = +800 \, \text{J}\) (ស្រូបកំដៅ)<br>
+                        \(W = -300 \, \text{J}\) (ធ្វើកម្ពាំងទៅលើបរិស្ថាន)
+                    </div>
+                    <div class="answer-step">
+                        <strong>ជំហានទី ២៖</strong> ប្រើច្បាប់ទី១ទែម៉ូឌីណាមិច<br>
+                        \(\Delta U = Q + W\)
+                    </div>
+                    <div class="answer-step">
+                        <strong>ជំហានទី ៣៖</strong> ជំនួសតម្លៃ<br>
+                        \(\Delta U = 800 + (-300) = 500 \, \text{J}\)
+                    </div>
+                    <div class="final-answer">
+                        ចម្លើយ៖ \(\Delta U = +500 \, \text{J}\) (ថាមពលក្នុងកើនឡើង ៥០០ ស៊ូល)
+                    </div>
+                </div>
+            </div>
+
+            <!-- លំហាត់ទី ៥ -->
+            <div class="exercise-item">
+                <h4>លំហាត់ទី ៥ <span class="difficulty medium">មធ្យម</span></h4>
+                <p class="exercise-question">
+                    ឧស្ម័នម៉ូណូអាតូមិចមួយមានសំពាធដើម \(P_1 = 1 \, \text{atm}\) និងមាឌដើម \(V_1 = 10 \, \text{L}\)។ 
+                    វាត្រូវបានកំដៅក្នុងសំពាធថេរ រហូតដល់មាឌកើនឡើងជា \(V_2 = 15 \, \text{L}\)។ 
+                    ចូរគណនា \(W\), \(\Delta U\), និង \(Q\)។ 
+                    (យក \(1 \, \text{atm} = 1.013 \times 10^5 \, \text{Pa}\))
+                </p>
+                <button class="btn-toggle" onclick="toggleAnswer(this)">បង្ហាញចម្លើយ</button>
+                <div class="answer-box">
+                    <h5>ដំណោះស្រាយ៖</h5>
+                    <div class="answer-step">
+                        <strong>ជំហានទី ១៖</strong> បំលែងខ្នាត<br>
+                        \(P = 1.013 \times 10^5 \, \text{Pa}\)<br>
+                        \(V_1 = 10 \times 10^{-3} = 0.01 \, \text{m}^3\)<br>
+                        \(V_2 = 15 \times 10^{-3} = 0.015 \, \text{m}^3\)<br>
+                        \(\Delta V = 0.005 \, \text{m}^3\)
+                    </div>
+                    <div class="answer-step">
+                        <strong>ជំហានទី ២៖</strong> គណនាកម្ពាំង \(W\)<br>
+                        \(W = P \Delta V = (1.013 \times 10^5)(0.005) = 506.5 \, \text{J}\)
+                    </div>
+                    <div class="answer-step">
+                        <strong>ជំហានទី ៣៖</strong> គណនាបម្រែបម្រួលថាមពលក្នុង (Isobaric)<br>
+                        \(\Delta U = \frac{3}{2} P \Delta V = \frac{3}{2} \times 506.5 = 759.75 \, \text{J}\)
+                    </div>
+                    <div class="answer-step">
+                        <strong>ជំហានទី ៤៖</strong> គណនាកំដៅ \(Q\)<br>
+                        \(\Delta U = Q + W \Rightarrow Q = \Delta U - W\)<br>
+                        \(Q = 759.75 - 506.5 = 253.25 \, \text{J}\)
+                    </div>
+                    <div class="final-answer">
+                        ចម្លើយ៖ \(W = 506.5 \, \text{J}\), \(\Delta U = 759.75 \, \text{J}\), \(Q = 253.25 \, \text{J}\)
+                    </div>
+                </div>
+            </div>
+
+            <!-- លំហាត់ទី ៦ -->
+            <div class="exercise-item">
+                <h4>លំហាត់ទី ៦ <span class="difficulty hard">ពិបាក</span></h4>
+                <p class="exercise-question">
+                    ឧស្ម័នម៉ូណូអាតូមិចចំនួន \(n = 1 \, \text{mol}\) ឆ្លងកាត់លំនឹងខួប \(A \to B \to C \to A\) ដូចខាងក្រោម៖
+                </p>
+                <ul style="margin-left: 1.5rem;">
+                    <li>\(A \to B\): រីកមាឌ Isothermal ពី \(V_A = 2 \, \text{L}\) ទៅ \(V_B = 6 \, \text{L}\) នៅ \(T = 350 \, \text{K}\)</li>
+                    <li>\(B \to C\): បង្រួមមាឌ Isobaric ពី \(V_B = 6 \, \text{L}\) ទៅ \(V_C = 2 \, \text{L}\)</li>
+                    <li>\(C \to A\): មាឌថេរ (Isochoric) ត្រឡប់មកសភាពដើម</li>
+                </ul>
+                <p class="exercise-question">
+                    ចូរគណនាកម្ពាំងសរុប \(W_{\text{total}}\) និង \(\Delta U_{\text{total}}\) ក្នុងមួយខួប។
+                </p>
+                <button class="btn-toggle" onclick="toggleAnswer(this)">បង្ហាញចម្លើយ</button>
+                <div class="answer-box">
+                    <h5>ដំណោះស្រាយ៖</h5>
+                    <div class="answer-step">
+                        <strong>ជំហានទី ១៖</strong> គណនាកម្ពាំង \(W_{AB}\) (Isothermal)<br>
+                        \(W_{AB} = nRT \ln\left(\frac{V_B}{V_A}\right) = 1 \times 8.314 \times 350 \times \ln\left(\frac{6}{2}\right)\)<br>
+                        \(W_{AB} = 2909.9 \times \ln(3) = 2909.9 \times 1.0986 \approx 3197 \, \text{J}\)
+                    </div>
+                    <div class="answer-step">
+                        <strong>ជំហានទី ២៖</strong> គណនាកម្ពាំង \(W_{BC}\) (Isobaric)<br>
+                        ត្រូវរក \(P_B\) ជាមុន៖ \(P_B V_B = nRT \Rightarrow P_B = \frac{nRT}{V_B}\)<br>
+                        \(P_B = \frac{1 \times 8.314 \times 350}{6 \times 10^{-3}} = \frac{2909.9}{0.006} \approx 4.85 \times 10^5 \, \text{Pa}\)<br>
+                        \(W_{BC} = P_B(V_C - V_B) = 4.85 \times 10^5 \times (0.002 - 0.006)\)<br>
+                        \(W_{BC} = 4.85 \times 10^5 \times (-0.004) = -1940 \, \text{J}\)
+                    </div>
+                    <div class="answer-step">
+                        <strong>ជំហានទី ៣៖</strong> គណនាកម្ពាំង \(W_{CA}\) (Isochoric)<br>
+                        \(W_{CA} = 0 \, \text{J}\) (ព្រោះ \(\Delta V = 0\))
+                    </div>
+                    <div class="answer-step">
+                        <strong>ជំហានទី ៤៖</strong> គណនាកម្ពាំងសរុប<br>
+                        \(W_{\text{total}} = W_{AB} + W_{BC} + W_{CA} = 3197 - 1940 + 0 = 1257 \, \text{J}\)
+                    </div>
+                    <div class="answer-step">
+                        <strong>ជំហានទី ៥៖:</strong> គណនា \(\Delta U_{\text{total}}\)<br>
+                        ក្នុងលំនឹងខួប ឧស្ម័នត្រឡប់មកសភាពដើមវិញ ដូច្នេះ \(\Delta U_{\text{total}} = 0\)
+                    </div>
+                    <div class="final-answer">
+                        ចម្លើយ៖ \(W_{\text{total}} \approx 1257 \, \text{J}\), \(\Delta U_{\text{total}} = 0 \, \text{J}\)
+                    </div>
+                </div>
+            </div>
+
+            <!-- លំហាត់ទី ៧ -->
+            <div class="exercise-item">
+                <h4>លំហាត់ទី ៧ <span class="difficulty hard">ពិបាក</span></h4>
+                <p class="exercise-question">
+                    ឧស្ម័នម៉ូណូអាតូមិចមួយមាន \(P_1 = 1 \times 10^5 \, \text{Pa}\), \(V_1 = 2 \times 10^{-3} \, \text{m}^3\) 
+                    និង \(T_1 = 240 \, \text{K}\)។ វាឆ្លងកាត់ដំណើរការលីនេអ៊ែរលើក្រាហ្វ P-V 
+                    ពីចំណុច \((V_1, P_1)\) ទៅចំណុច \((V_2, P_2)\) ដែល \(V_2 = 5 \times 10^{-3} \, \text{m}^3\) 
+                    និង \(P_2 = 3 \times 10^5 \, \text{Pa}\)។ ចូរគណនា៖
+                </p>
+                <ol style="margin-left: 1.5rem;">
+                    <li>កម្ពាំង \(W\)</li>
+                    <li>បម្រែបម្រួលថាមពលក្នុង \(\Delta U\)</li>
+                    <li>បរិមាណកំដៅ \(Q\)</li>
+                </ol>
+                <button class="btn-toggle" onclick="toggleAnswer(this)">បង្ហាញចម្លើយ</button>
+                <div class="answer-box">
+                    <h5>ដំណោះស្រាយ៖</h5>
+                    <div class="answer-step">
+                        <strong>ជំហានទី ១៖</strong> គណនាកម្ពាំង (រាងចតុកោណកែង + ត្រីកោណ)<br>
+                        \(W = P_1 \Delta V + \frac{1}{2}\Delta P \Delta V\)<br>
+                        \(\Delta V = 5 \times 10^{-3} - 2 \times 10^{-3} = 3 \times 10^{-3} \, \text{m}^3\)<br>
+                        \(\Delta P = 3 \times 10^5 - 1 \times 10^5 = 2 \times 10^5 \, \text{Pa}\)<br>
+                        \(W = (1 \times 10^5)(3 \times 10^{-3}) + \frac{1}{2}(2 \times 10^5)(3 \times 10^{-3})\)<br>
+                        \(W = 300 + 300 = 600 \, \text{J}\)
+                    </div>
+                    <div class="answer-step">
+                        <strong>ជំហានទី ២៖</strong> គណនា \(\Delta U\)<br>
+                        \(\Delta U = \frac{3}{2}(P_2 V_2 - P_1 V_1)\)<br>
+                        \(P_2 V_2 = (3 \times 10^5)(5 \times 10^{-3}) = 1500 \, \text{J}\)<br>
+                        \(P_1 V_1 = (1 \times 10^5)(2 \times 10^{-3}) = 200 \, \text{J}\)<br>
+                        \(\Delta U = \frac{3}{2}(1500 - 200) = \frac{3}{2}(1300) = 1950 \, \text{J}\)
+                    </div>
+                    <div class="answer-step">
+                        <strong>ជំហានទី ៣៖</strong> គណនា \(Q\)<br>
+                        \(\Delta U = Q + W \Rightarrow Q = \Delta U - W\)<br>
+                        \(Q = 1950 - 600 = 1350 \, \text{J}\)
+                    </div>
+                    <div class="final-answer">
+                        ចម្លើយ៖ \(W = 600 \, \text{J}\), \(\Delta U = 1950 \, \text{J}\), \(Q = 1350 \, \text{J}\)
+                    </div>
+                </div>
+            </div>
+
+            <!-- លំហាត់ទី ៨ -->
+            <div class="exercise-item">
+                <h4>លំហាត់ទី ៨ <span class="difficulty easy">ងាយ</span></h4>
+                <p class="exercise-question">
+                    បំលែងខ្នាតខាងក្រោម៖
+                </p>
+                <ol style="margin-left: 1.5rem;">
+                    <li>\(2 \, \text{atm}\) ទៅ \(\text{Pa}\)</li>
+                    <li>\(500 \, \text{cm}^3\) ទៅ \(\text{m}^3\)</li>
+                    <li>\(25^\circ\text{C}\) ទៅ \(\text{K}\)</li>
+                    <li>\(3 \, \text{kcal}\) ទៅ \(\text{J}\)</li>
+                </ol>
+                <button class="btn-toggle" onclick="toggleAnswer(this)">បង្ហាញចម្លើយ</button>
+                <div class="answer-box">
+                    <h5>ដំណោះស្រាយ៖</h5>
+                    <div class="answer-step">
+                        <strong>១)</strong> \(2 \, \text{atm} = 2 \times 1.013 \times 10^5 = 2.026 \times 10^5 \, \text{Pa}\)
+                    </div>
+                    <div class="answer-step">
+                        <strong>២)</strong> \(500 \, \text{cm}^3 = 500 \times 10^{-6} = 5 \times 10^{-4} \, \text{m}^3\)
+                    </div>
+                    <div class="answer-step">
+                        <strong>៣)</strong> \(T = 25 + 273.15 = 298.15 \, \text{K}\)
+                    </div>
+                    <div class="answer-step">
+                        <strong>៤)</strong> \(3 \, \text{kcal} = 3 \times 4184 = 12552 \, \text{J}\)
+                    </div>
+                    <div class="final-answer">
+                        ចម្លើយ៖ \(2.026 \times 10^5 \, \text{Pa}\) ; \(5 \times 10^{-4} \, \text{m}^3\) ; \(298.15 \, \text{K}\) ; \(12552 \, \text{J}\)
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    <script>
+          (function(){
+    function detectDeviceName(){
+      const ua = navigator.userAgent;
+      let os = 'Unknown';
+      if(/android/i.test(ua)) os = 'Android';
+      else if(/iphone|ipad|ipod/i.test(ua)) os = 'iOS';
+      else if(/windows/i.test(ua)) os = 'Windows';
+      else if(/mac os/i.test(ua)) os = 'macOS';
+      else if(/linux/i.test(ua)) os = 'Linux';
+
+      let browser = 'Browser';
+      if(/vivo/i.test(ua)) browser = 'ViVo';
+      else if(/samsung/i.test(ua)) browser = 'Samsung';
+      else if(/edg/i.test(ua)) browser = 'Edge';
+      else if(/chrome/i.test(ua)) browser = 'Chrome';
+      else if(/firefox/i.test(ua)) browser = 'Firefox';
+      else if(/safari/i.test(ua)) browser = 'Safari';
+
+      return `${browser}-${os}`;
+    }
+
+    function saveEntry(ip){
+      try{
+        const page = location.pathname.split('/').pop().replace('.html','');
+        const time = new Date().toLocaleString();
+        const device = detectDeviceName();
+        let entries = JSON.parse(localStorage.getItem('visitLog') || '[]');
+        entries.push({ page: page, time: time, device: device, ip: ip });
+        if(entries.length > 300) entries = entries.slice(-300);
+        localStorage.setItem('visitLog', JSON.stringify(entries));
+      }catch(e){}
+    }
+
+    fetch('https://api.ipify.org?format=json')
+      .then(r => r.json())
+      .then(data => saveEntry(data.ip))
+      .catch(() => saveEntry('unknown'));
+  })();
+                
+                
+        function toggleAnswer(button) {
+            const answerBox = button.nextElementSibling;
+            if (answerBox.classList.contains('show')) {
+                answerBox.classList.remove('show');
+                button.textContent = 'បង្ហាញចម្លើយ';
+                button.classList.remove('active');
+            } else {
+                answerBox.classList.add('show');
+                button.textContent = 'លាក់ចម្លើយ';
+                button.classList.add('active');
+            }
+            // ធ្វើឱ្យ MathJax គណនារូបមន្តថ្មីៗដែលបង្ហាញ
+            if (window.MathJax && window.MathJax.typesetPromise) {
+                MathJax.typesetPromise([answerBox]).catch(function (err) {
+                    console.log('MathJax error: ', err.message);
+                });
+            }
+        }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>វេបសាយមេរៀនរូបវិទ្យា ថ្នាក់ទី១២</title>
+
+    <!-- ពុម្ពអក្សរខ្មែរ -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Khmer:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans Khmer', sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #6dd5ed 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem 1rem;
+            color: #2c3e50;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* ផ្ទៃខាងក្រោយបន្ថែមចលនា */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background:
+                radial-gradient(circle at 20% 30%, rgba(255,255,255,0.08) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(255,255,255,0.08) 0%, transparent 40%);
+            pointer-events: none;
+        }
+
+        .portal-header {
+            text-align: center;
+            color: white;
+            margin-bottom: 3rem;
+            position: relative;
+            z-index: 2;
+            animation: fadeDown 0.9s ease-out;
+        }
+
+        .portal-header .badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.18);
+            border: 1px solid rgba(255,255,255,0.35);
+            padding: 6px 18px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            margin-bottom: 1rem;
+            backdrop-filter: blur(6px);
+        }
+
+        .portal-header h1 {
+            font-size: 2.6rem;
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+            text-shadow: 0 4px 15px rgba(0,0,0,0.25);
+        }
+
+        .portal-header p {
+            font-size: 1.15rem;
+            opacity: 0.92;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.7;
+        }
+
+        /* ប្រអប់មេរៀនទាំង ២ */
+        .lesson-portal {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2.5rem;
+            width: 100%;
+            max-width: 900px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .portal-card {
+            flex: 1 1 340px;
+            max-width: 400px;
+            background: rgba(255,255,255,0.97);
+            border-radius: 22px;
+            padding: 2.5rem 2rem;
+            text-align: center;
+            text-decoration: none;
+            color: #2c3e50;
+            box-shadow: 0 20px 45px rgba(0,0,0,0.22);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            border: 2px solid transparent;
+            animation: fadeUp 0.9s ease-out backwards;
+        }
+
+        .portal-card:nth-child(1) { animation-delay: 0.15s; }
+        .portal-card:nth-child(2) { animation-delay: 0.3s; }
+
+        .portal-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 8px;
+            transition: height 0.4s ease;
+        }
+
+        .portal-card.genetic::before {
+            background: linear-gradient(90deg, #16a085, #27ae60);
+        }
+
+        .portal-card.thermo::before {
+            background: linear-gradient(90deg, #e67e22, #e74c3c);
+        }
+
+        .portal-card:hover {
+            transform: translateY(-12px) scale(1.02);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+            border-color: rgba(255,255,255,0.6);
+        }
+
+        .portal-card:hover::before {
+            height: 12px;
+        }
+
+        .portal-icon {
+            width: 90px;
+            height: 90px;
+            margin: 0 auto 1.3rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.8rem;
+            transition: transform 0.5s ease;
+            position: relative;
+        }
+
+        .portal-card.genetic .portal-icon {
+            background: linear-gradient(135deg, #d1f2e8, #a3e4c9);
+            box-shadow: 0 8px 20px rgba(39, 174, 96, 0.25);
+        }
+
+        .portal-card.thermo .portal-icon {
+            background: linear-gradient(135deg, #fde3cf, #fbc49a);
+            box-shadow: 0 8px 20px rgba(230, 126, 34, 0.25);
+        }
+
+        .portal-card:hover .portal-icon {
+            transform: rotate(10deg) scale(1.1);
+        }
+
+        .portal-card h2 {
+            font-size: 1.35rem;
+            margin-bottom: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .portal-card.genetic h2 { color: #16a085; }
+        .portal-card.thermo h2 { color: #d35400; }
+
+        .portal-card p {
+            font-size: 0.97rem;
+            color: #666;
+            line-height: 1.7;
+            margin-bottom: 1.8rem;
+            min-height: 55px;
+        }
+
+        .portal-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 30px;
+            border-radius: 40px;
+            font-weight: 700;
+            font-size: 1rem;
+            color: white;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+        }
+
+        .portal-card.genetic .portal-btn {
+            background: linear-gradient(135deg, #16a085, #27ae60);
+        }
+
+        .portal-card.thermo .portal-btn {
+            background: linear-gradient(135deg, #e67e22, #e74c3c);
+        }
+
+        .portal-card:hover .portal-btn {
+            transform: scale(1.06);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+        }
+
+        .portal-btn .arrow {
+            transition: transform 0.3s ease;
+        }
+
+        .portal-card:hover .portal-btn .arrow {
+            transform: translateX(5px);
+        }
+
+        /* ផ្នែកខាងក្រោម */
+        .portal-footer {
+            margin-top: 3rem;
+            text-align: center;
+            color: rgba(255,255,255,0.85);
+            font-size: 0.9rem;
+            position: relative;
+            z-index: 2;
+            animation: fadeUp 1s ease-out 0.5s backwards;
+        }
+
+        /* ចលនា */
+        @keyframes fadeDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .portal-header h1 { font-size: 1.9rem; }
+            .portal-header p { font-size: 1rem; }
+            .lesson-portal { gap: 1.8rem; }
+            .portal-card { padding: 2rem 1.5rem; }
+            .portal-icon { width: 75px; height: 75px; font-size: 2.3rem; }
+        }
+
+        @media (max-width: 480px) {
+            body { padding: 1.5rem 0.8rem; }
+            .portal-header { margin-bottom: 2rem; }
+            .portal-header h1 { font-size: 1.5rem; }
+            .portal-header .badge { font-size: 0.78rem; }
+            .portal-card h2 { font-size: 1.15rem; }
+            .portal-card p { font-size: 0.9rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ក្បាលទំព័រ -->
+    <div class="portal-header">
+        <div class="badge">📚 រូបវិទ្យា ថ្នាក់ទី១២</div>
+        <h1>វេបសាយមេរៀនរូបវិទ្យា</h1>
+        <p>សូមស្វាគមន៍! សូមជ្រើសរើសមេរៀនខាងក្រោមដើម្បីចាប់ផ្តើមសិក្សា</p>
+    </div>
+
+    <!-- ប្រអប់មេរៀនទាំង ២ -->
+    <div class="lesson-portal">
+
+        <!-- ប្រអប់ទី ១ -->
+        <a href="genetic.html" class="portal-card genetic">
+            <div class="portal-icon">⚛️</div>
+            <h2>ទ្រឹស្ដីស៊ីនិច្ចនៃឧស្ម័ន</h2>
+            <p>សិក្សាអំពីចលនាម៉ូលេគុល សម្ពាធ សីតុណ្ហភាព និងសមីការឧស្ម៘័នបរិសុទ្ធ</p>
+            <span class="portal-btn">
+                ចូលរៀន <span class="arrow">→</span>
+            </span>
+        </a>
+
+        <!-- ប្រអប់ទី ២ -->
+        <a href="thermodynamics.html" class="portal-card thermo">
+            <div class="portal-icon">🔥</div>
+            <h2>ច្បាប់ទី១ទែម៉ូឌីណាមិច</h2>
+            <p>សិក្សាអំពីកម្ពាំង កំដៅ ថាមពលក្នុង និងគោលការណ៍អភិរក្សថាមពល</p>
+            <span class="portal-btn">
+                ចូលរៀន <span class="arrow">→</span>
+            </span>
+        </a>
+
+    </div>
+
+    <!-- ផ្នែកខាងក្រោម -->
+    <div class="portal-footer">
+        © 2024 វេបសាយមេរៀនរូបវិទ្យា ថ្នាក់ទី១២ | រៀបចំឡើងសម្រាប់ការសិក្សា
+    </div>
+    <script>
+      (function(){
+    function detectDeviceName(){
+      const ua = navigator.userAgent;
+      let os = 'Unknown';
+      if(/android/i.test(ua)) os = 'Android';
+      else if(/iphone|ipad|ipod/i.test(ua)) os = 'iOS';
+      else if(/windows/i.test(ua)) os = 'Windows';
+      else if(/mac os/i.test(ua)) os = 'macOS';
+      else if(/linux/i.test(ua)) os = 'Linux';
+
+      let browser = 'Browser';
+      if(/vivo/i.test(ua)) browser = 'ViVo';
+      else if(/samsung/i.test(ua)) browser = 'Samsung';
+      else if(/edg/i.test(ua)) browser = 'Edge';
+      else if(/chrome/i.test(ua)) browser = 'Chrome';
+      else if(/firefox/i.test(ua)) browser = 'Firefox';
+      else if(/safari/i.test(ua)) browser = 'Safari';
+
+      return `${browser}-${os}`;
+    }
+
+    function saveEntry(ip){
+      try{
+        const page = location.pathname.split('/').pop().replace('.html','');
+        const time = new Date().toLocaleString();
+        const device = detectDeviceName();
+        let entries = JSON.parse(localStorage.getItem('visitLog') || '[]');
+        entries.push({ page: page, time: time, device: device, ip: ip });
+        if(entries.length > 300) entries = entries.slice(-300);
+        localStorage.setItem('visitLog', JSON.stringify(entries));
+      }catch(e){}
+    }
+
+    fetch('https://api.ipify.org?format=json')
+      .then(r => r.json())
+      .then(data => saveEntry(data.ip))
+      .catch(() => saveEntry('unknown'));
+  })();
+    </script>
+</body>
+</html>

@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>លំហាត់រូបវិទ្យា - ឧស្ម័ន</title>
+
+<!-- MathJax សម្រាប់បង្ហាញរូបមន្ត -->
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['\\(', '\\)']] },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Khmer OS', 'Khmer OS Battambang', 'Noto Sans Khmer', sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    color: #1e2a3a;
+    line-height: 1.7;
+    padding: 24px 16px;
+  }
+
+  .app {
+    max-width: 860px;
+    margin: 0 auto;
+  }
+
+  .app-header {
+    text-align: center;
+    margin-bottom: 26px;
+  }
+
+  .app-header h1 {
+    font-size: 2rem;
+    color: #fff;
+    text-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    margin-bottom: 6px;
+  }
+
+  .app-subtitle {
+    color: rgba(255,255,255,0.92);
+    font-size: 0.98rem;
+  }
+
+  /* Progress */
+  .progress-wrapper { margin-bottom: 20px; }
+
+  .progress-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    color: #fff;
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+
+  .progress-bar {
+    height: 10px;
+    background: rgba(255,255,255,0.3);
+    border-radius: 20px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #f6d365, #fda085);
+    border-radius: 20px;
+    transition: width 0.4s ease;
+    width: 0%;
+  }
+
+  /* Question Card */
+  .question-card {
+    background: #fff;
+    border-radius: 20px;
+    padding: 28px 30px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.18);
+    animation: fadeIn 0.4s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .category-badge {
+    display: inline-block;
+    background: #e8f0ff;
+    color: #3a6bc8;
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-bottom: 14px;
+  }
+
+  .question-text {
+    font-size: 1.13rem;
+    color: #0b3d5c;
+    margin-bottom: 20px;
+    font-weight: 600;
+    line-height: 1.9;
+  }
+
+  .options {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .option {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 18px;
+    background: #f7fafd;
+    border: 2px solid #e1ebf5;
+    border-radius: 14px;
+    cursor: pointer;
+    text-align: left;
+    font-size: 1rem;
+    font-family: inherit;
+    transition: all 0.2s ease;
+    width: 100%;
+    color: #1e2a3a;
+  }
+
+  .option:hover:not(:disabled) {
+    background: #eaf2fb;
+    border-color: #4a90e2;
+    transform: translateX(4px);
+  }
+
+  .option.selected {
+    background: #dbeafe;
+    border-color: #4a90e2;
+    box-shadow: 0 0 0 3px rgba(74,144,226,0.2);
+  }
+
+  .option.correct {
+    background: #dcfce7;
+    border-color: #22c55e;
+  }
+
+  .option.wrong {
+    background: #fee2e2;
+    border-color: #ef4444;
+  }
+
+  .option:disabled { cursor: default; }
+
+  .option-letter {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 34px;
+    height: 34px;
+    background: #4a90e2;
+    color: #fff;
+    border-radius: 50%;
+    font-weight: 700;
+    font-size: 0.95rem;
+    flex-shrink: 0;
+  }
+
+  .option.correct .option-letter { background: #22c55e; }
+  .option.wrong .option-letter { background: #ef4444; }
+
+  .option-text { flex: 1; }
+
+  .check-icon, .cross-icon {
+    font-size: 1.4rem;
+    font-weight: 700;
+  }
+  .check-icon { color: #22c55e; }
+  .cross-icon { color: #ef4444; }
+
+  /* Explanation */
+  .explanation {
+    margin-top: 20px;
+    padding: 14px 18px;
+    background: #fffbeb;
+    border-left: 4px solid #f59e0b;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    color: #5a4a1a;
+    animation: fadeIn 0.4s ease;
+  }
+
+  /* Actions */
+  .quiz-actions {
+    margin-top: 24px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .btn {
+    padding: 14px 40px;
+    border: none;
+    border-radius: 14px;
+    font-size: 1.05rem;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+  }
+
+  .btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, #4a90e2, #3a6bc8);
+    color: #fff;
+  }
+
+  .btn-primary:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(74,144,226,0.4);
+  }
+
+  .btn-success {
+    background: linear-gradient(135deg, #22c55e, #16a34a);
+    color: #fff;
+  }
+
+  .btn-success:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(34,197,94,0.4);
+  }
+
+  .btn-secondary {
+    background: #fff;
+    color: #3a6bc8;
+    border: 2px solid #4a90e2;
+  }
+
+  .btn-secondary:hover {
+    background: #eaf2fb;
+    transform: translateY(-2px);
+  }
+
+  /* Result */
+  .result-card {
+    background: #fff;
+    border-radius: 24px;
+    padding: 40px 30px;
+    text-align: center;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+    animation: fadeIn 0.5s ease;
+  }
+
+  .result-emoji { font-size: 4rem; margin-bottom: 10px; }
+
+  .result-card h2 {
+    color: #0b3d5c;
+    margin-bottom: 24px;
+  }
+
+  .score-circle {
+    position: relative;
+    width: 160px;
+    height: 160px;
+    margin: 0 auto 16px;
+  }
+
+  .score-circle svg {
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+  }
+
+  .score-bg {
+    fill: none;
+    stroke: #e5eef7;
+    stroke-width: 10;
+  }
+
+  .score-progress {
+    fill: none;
+    stroke: #4a90e2;
+    stroke-width: 10;
+    stroke-linecap: round;
+    transition: stroke-dasharray 0.8s ease;
+  }
+
+  .score-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+  }
+
+  .score-num {
+    font-size: 2.6rem;
+    font-weight: 800;
+    color: #0b3d5c;
+  }
+
+  .score-total {
+    font-size: 1.2rem;
+    color: #6a7a8a;
+    font-weight: 600;
+  }
+
+  .score-percentage {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: #4a90e2;
+    margin-bottom: 10px;
+  }
+
+  .result-message {
+    font-size: 1.05rem;
+    color: #5a6a7a;
+    margin-bottom: 28px;
+  }
+
+  .result-actions {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  /* Review */
+  .review-container {
+    background: #fff;
+    border-radius: 20px;
+    padding: 28px 30px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.18);
+    animation: fadeIn 0.4s ease;
+  }
+
+  .review-title {
+    color: #0b3d5c;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .review-item {
+    padding: 18px 0;
+    border-bottom: 2px dashed #e1ebf5;
+  }
+
+  .review-item:last-of-type {
+    border-bottom: none;
+    margin-bottom: 20px;
+  }
+
+  .review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+
+  .review-num { font-weight: 700; color: #0b3d5c; }
+
+  .review-status {
+    padding: 3px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 700;
+  }
+
+  .review-status.correct { background: #dcfce7; color: #16a34a; }
+  .review-status.wrong { background: #fee2e2; color: #dc2626; }
+
+  .review-question {
+    font-weight: 600;
+    color: #1e2a3a;
+    margin-bottom: 10px;
+  }
+
+  .review-options {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 10px;
+  }
+
+  .review-opt {
+    padding: 8px 14px;
+    border-radius: 10px;
+    background: #f7fafd;
+    font-size: 0.95rem;
+  }
+
+  .review-opt.correct {
+    background: #dcfce7;
+    border-left: 4px solid #22c55e;
+  }
+
+  .review-opt.wrong {
+    background: #fee2e2;
+    border-left: 4px solid #ef4444;
+  }
+
+  .app-footer {
+    text-align: center;
+    margin-top: 40px;
+    color: rgba(255,255,255,0.85);
+    font-size: 0.9rem;
+  }
+
+  /* Responsive */
+  @media (max-width: 600px) {
+    .app-header h1 { font-size: 1.5rem; }
+    .question-card, .result-card, .review-container { padding: 20px 18px; }
+    .option { padding: 12px 14px; font-size: 0.92rem; }
+    .option-letter { min-width: 28px; height: 28px; font-size: 0.85rem; }
+    .btn { padding: 12px 24px; font-size: 0.95rem; width: 100%; }
+    .result-actions { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <header class="app-header">
+    <h1>⚛️ លំហាត់រូបវិទ្យា៖ ឧស្ម័ន</h1>
+    <p class="app-subtitle" id="subtitle">សូមជ្រើសរើសចម្លើយត្រឹមត្រូវខាងក្រោម</p>
+  </header>
+
+  <main id="main"></main>
+
+  <footer class="app-footer">
+    📚 ផ្អែកលើរូបមន្តរូបវិទ្យាឧស្ម័ន | HTML Quiz App
+  </footer>
+</div>
+
+<script>
+    (function(){
+    function detectDeviceName(){
+      const ua = navigator.userAgent;
+      let os = 'Unknown';
+      if(/android/i.test(ua)) os = 'Android';
+      else if(/iphone|ipad|ipod/i.test(ua)) os = 'iOS';
+      else if(/windows/i.test(ua)) os = 'Windows';
+      else if(/mac os/i.test(ua)) os = 'macOS';
+      else if(/linux/i.test(ua)) os = 'Linux';
+
+      let browser = 'Browser';
+      if(/vivo/i.test(ua)) browser = 'ViVo';
+      else if(/samsung/i.test(ua)) browser = 'Samsung';
+      else if(/edg/i.test(ua)) browser = 'Edge';
+      else if(/chrome/i.test(ua)) browser = 'Chrome';
+      else if(/firefox/i.test(ua)) browser = 'Firefox';
+      else if(/safari/i.test(ua)) browser = 'Safari';
+
+      return `${browser}-${os}`;
+    }
+
+    function saveEntry(ip){
+      try{
+        const page = location.pathname.split('/').pop().replace('.html','');
+        const time = new Date().toLocaleString();
+        const device = detectDeviceName();
+        let entries = JSON.parse(localStorage.getItem('visitLog') || '[]');
+        entries.push({ page: page, time: time, device: device, ip: ip });
+        if(entries.length > 300) entries = entries.slice(-300);
+        localStorage.setItem('visitLog', JSON.stringify(entries));
+      }catch(e){}
+    }
+
+    fetch('https://api.ipify.org?format=json')
+      .then(r => r.json())
+      .then(data => saveEntry(data.ip))
+      .catch(() => saveEntry('unknown'));
+  })();
+/* ============ ទិន្នន័យសំណួរ ============ */
+const questions = [
+  {
+    category: "សម្ពាធឧស្ម័ន",
+    question: "តើរូបមន្តសម្ពាធឧស្ម័នខាងក្រោមមួយណាត្រឹមត្រូវ?",
+    options: [
+      "\\(P = \\frac{1}{3} \\rho V_{av}^2\\)",
+      "\\(P = \\frac{2}{3} \\rho V_{av}\\)",
+      "\\(P = \\frac{1}{2} \\rho V_{av}^2\\)",
+      "\\(P = \\rho V_{av}^2\\)"
+    ],
+    correct: 0,
+    explanation: "រូបមន្តត្រឹមត្រូវគឺ \\(P = \\frac{1}{3} \\rho V_{av}^2\\) ដែល \\(\\rho\\) ជាម៉ាសមាឌ និង \\(V_{av}\\) ជាល្បឿនមធ្យម។"
+  },
+  {
+    category: "ខ្នាតសម្ពាធ",
+    question: "តើ 1 atm ស្មើនឹងប៉ុន្មាន Pa?",
+    options: ["\\(10^3\\) Pa", "\\(10^5\\) Pa", "\\(10^6\\) Pa", "\\(760\\) Pa"],
+    correct: 1,
+    explanation: "1 atm = \\(10^5\\) Pa = 760 mmHg។"
+  },
+  {
+    category: "ខ្នាតសម្ពាធ",
+    question: "តើ 1 GPa ស្មើនឹងប៉ុន្មាន Pa?",
+    options: ["\\(10^6\\) Pa", "\\(10^9\\) Pa", "\\(10^{12}\\) Pa", "\\(10^3\\) Pa"],
+    correct: 1,
+    explanation: "1 GPa = \\(10^9\\) Pa (Giga = \\(10^9\\))។"
+  },
+  {
+    category: "សមីការឧស្ម័នបរិសុទ្ធ",
+    question: "តើសមីការឧស្ម័នបរិសុទ្ធតាមចំនួនម៉ូលេគុលគឺជាអ្វី?",
+    options: [
+      "\\(PV = nRT\\)",
+      "\\(PV = Nk_BT\\)",
+      "\\(PV = mRT\\)",
+      "ទាំង ក និង ខ ត្រឹមត្រូវ"
+    ],
+    correct: 3,
+    explanation: "ទាំង \\(PV = nRT\\) និង \\(PV = Nk_BT\\) សុទ្ធតែត្រឹមត្រូវ (n ជាម៉ូល, N ជាចំនួនម៉ូលេគុល)។"
+  },
+  {
+    category: "ថេរឧស្ម័ន",
+    question: "តម្លៃថេរ Boltzmann \\(k_B\\) គឺស្មើនឹងប៉ុន្មាន?",
+    options: [
+      "\\(1.38 \\times 10^{-23}\\) J/K",
+      "\\(6.23 \\times 10^{23}\\) J/K",
+      "\\(8.31\\) J/K",
+      "\\(1.38 \\times 10^{23}\\) J/K"
+    ],
+    correct: 0,
+    explanation: "\\(k_B = 1.38 \\times 10^{-23}\\) J/K។"
+  },
+  {
+    category: "ច្បាប់ឧស្ម័ន",
+    question: "ច្បាប់ប៊យ (Boyle's Law) មានន័យថានៅពេល T ថេរ តើទំនាក់ទំនងរវាង P និង V ជាអ្វី?",
+    options: [
+      "\\(P_1/T_1 = P_2/T_2\\)",
+      "\\(P_1V_1 = P_2V_2\\)",
+      "\\(V_1/T_1 = V_2/T_2\\)",
+      "\\(P_1V_1/T_1 = P_2V_2/T_2\\)"
+    ],
+    correct: 1,
+    explanation: "ច្បាប់ប៊យ៖ នៅ T ថេរ \\(P_1V_1 = P_2V_2\\)។"
+  },
+  {
+    category: "ច្បាប់ឧស្ម័ន",
+    question: "ច្បាប់ឆាល (Charles's Law) មានន័យថានៅពេល P ថេរ តើទំនាក់ទំនងរវាង V និង T ជាអ្វី?",
+    options: [
+      "\\(V_1T_1 = V_2T_2\\)",
+      "\\(V_1/T_1 = V_2/T_2\\)",
+      "\\(P_1/T_1 = P_2/T_2\\)",
+      "\\(V_1/P_1 = V_2/P_2\\)"
+    ],
+    correct: 1,
+    explanation: "ច្បាប់ឆាល៖ នៅ P ថេរ \\(V_1/T_1 = V_2/T_2\\)។"
+  },
+  {
+    category: "ថាមពលស៊ីនេទិច",
+    question: "តើថាមពលស៊ីនេទិចមធ្យមនៃ ១ ម៉ូលេគុល \\(K_{av}\\) គឺជាអ្វី?",
+    options: [
+      "\\(K_{av} = \\frac{1}{2} k_BT\\)",
+      "\\(K_{av} = \\frac{3}{2} k_BT\\)",
+      "\\(K_{av} = \\frac{5}{2} k_BT\\)",
+      "\\(K_{av} = k_BT\\)"
+    ],
+    correct: 1,
+    explanation: "\\(K_{av} = \\frac{3}{2} k_BT\\) សម្រាប់ឧស្ម័នបរិសុទ្ធ។"
+  },
+  {
+    category: "ល្បឿនមធ្យម",
+    question: "តើរូបមន្តល្បឿនមធ្យម \\(V_{av}\\) តាមម៉ាសម៉ូលេគុល \\(m_0\\) គឺជាអ្វី?",
+    options: [
+      "\\(V_{av} = \\sqrt{\\frac{3k_BT}{m_0}}\\)",
+      "\\(V_{av} = \\sqrt{\\frac{2k_BT}{m_0}}\\)",
+      "\\(V_{av} = \\frac{3k_BT}{m_0}\\)",
+      "\\(V_{av} = \\sqrt{\\frac{k_BT}{m_0}}\\)"
+    ],
+    correct: 0,
+    explanation: "\\(V_{av} = \\sqrt{\\frac{3k_BT}{m_0}}\\) ឬ \\(V_{av} = \\sqrt{\\frac{3RT}{M}}\\)។"
+  },
+  {
+    category: "បរិមាណឧស្ម័ន",
+    question: "តើចំនួនម៉ូល \\(n\\) អាចគណនាតាមរូបមន្តណា?",
+    options: [
+      "\\(n = \\frac{m}{M}\\)",
+      "\\(n = \\frac{V}{V_m}\\)",
+      "\\(n = \\frac{N}{N_A}\\)",
+      "ទាំងអស់ត្រឹមត្រូវ"
+    ],
+    correct: 3,
+    explanation: "ចំនួនម៉ូលអាចគណនាបានតាម \\(n = \\frac{m}{M} = \\frac{V}{V_m} = \\frac{N}{N_A}\\)។"
+  },
+  {
+    category: "ថាមពលស៊ីនេទិច",
+    question: "តើថាមពលស៊ីនេទិចសរុប \\(K\\) នៃ N ម៉ូលេគុល គឺជាអ្វី?",
+    options: [
+      "\\(K = \\frac{1}{2}Nk_BT\\)",
+      "\\(K = \\frac{3}{2}Nk_BT\\)",
+      "\\(K = \\frac{3}{2}nRT\\)",
+      "ទាំង ខ និង គ ត្រឹមត្រូវ"
+    ],
+    correct: 3,
+    explanation: "\\(K = \\frac{3}{2}Nk_BT = \\frac{3}{2}PV = \\frac{3}{2}nRT\\) ដូច្នេះ ខ និង គ ត្រឹមត្រូវ។"
+  },
+  {
+    category: "ច្បាប់គេលុយសាក់",
+    question: "ច្បាប់គេលុយសាក់ (Gay-Lussac's Law) មានន័យថានៅពេល V ថេរ តើទំនាក់ទំនងរវាង P និង T ជាអ្វី?",
+    options: [
+      "\\(P_1T_1 = P_2T_2\\)",
+      "\\(P_1/T_1 = P_2/T_2\\)",
+      "\\(P_1V_1 = P_2V_2\\)",
+      "\\(V_1/T_1 = V_2/T_2\\)"
+    ],
+    correct: 1,
+    explanation: "ច្បាប់គេលុយសាក់៖ នៅ V ថេរ \\(P_1/T_1 = P_2/T_2\\)។"
+  },
+  {
+    category: "ថេរឧស្ម័ន",
+    question: "តើទំនាក់ទំនងរវាង R, \\(N_A\\) និង \\(k_B\\) គឺជាអ្វី?",
+    options: [
+      "\\(R = N_A / k_B\\)",
+      "\\(R = N_A \\times k_B\\)",
+      "\\(R = k_B / N_A\\)",
+      "\\(R = N_A + k_B\\)"
+    ],
+    correct: 1,
+    explanation: "\\(R = N_A \\times k_B = 6.23 \\times 10^{23} \\times 1.38 \\times 10^{-23} = 8.31\\) J/(mol·K)។"
+  },
+  {
+    category: "ម៉ាសមាឌ",
+    question: "តើម៉ាសមាឌ \\(\\rho\\) គណនាតាមរូបមន្តណា?",
+    options: [
+      "\\(\\rho = \\frac{V}{m}\\)",
+      "\\(\\rho = \\frac{m}{V}\\)",
+      "\\(\\rho = mV\\)",
+      "\\(\\rho = \\frac{m_0}{V}\\)"
+    ],
+    correct: 1,
+    explanation: "ម៉ាសមាឌ \\(\\rho = \\frac{m}{V}\\) គិតជា kg/m³។"
+  },
+  {
+    category: "រូបមន្តសម្ពាធ",
+    question: "តើរូបមន្តសម្ពាធតាមថាមពលស៊ីនេទិចមធ្យម \\(K_{av}\\) គឺជាអ្វី?",
+    options: [
+      "\\(P = \\frac{1}{3} \\frac{N}{V} K_{av}\\)",
+      "\\(P = \\frac{2}{3} \\frac{N}{V} K_{av}\\)",
+      "\\(P = \\frac{3}{2} \\frac{N}{V} K_{av}\\)",
+      "\\(P = \\frac{N}{V} K_{av}\\)"
+    ],
+    correct: 1,
+    explanation: "\\(P = \\frac{2}{3} \\frac{N}{V} K_{av}\\) ដែល \\(K_{av} = \\frac{1}{2}m_0V_{av}^2\\)។"
+  }
+];
+
+/* ============ ស្ថានភាព ============ */
+const state = {
+  currentIdx: 0,
+  selected: null,
+  answers: [],
+  showResult: false,
+  isFinished: false,
+  isReview: false
+};
+
+const mainEl = document.getElementById('main');
+const subtitleEl = document.getElementById('subtitle');
+
+/* ============ មុខងារ ============ */
+function typesetMath() {
+  if (window.MathJax && window.MathJax.typesetPromise) {
+    window.MathJax.typesetPromise().catch(() => {});
+  }
+}
+
+function escapeHtml(str) {
+  return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+function renderProgress() {
+  const total = questions.length;
+  const current = state.currentIdx + 1;
+  const pct = Math.round((current / total) * 100);
+  return `
+    <div class="progress-wrapper">
+      <div class="progress-info">
+        <span>សំណួរទី ${current} នៃ ${total}</span>
+        <span>${pct}%</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" style="width: ${pct}%"></div>
+      </div>
+    </div>
+  `;
+}
+
+function renderQuestion() {
+  const q = questions[state.currentIdx];
+  const total = questions.length;
+
+  let optionsHtml = '';
+  q.options.forEach((opt, idx) => {
+    let cls = 'option';
+    if (state.showResult) {
+      if (idx === q.correct) cls += ' correct';
+      else if (idx === state.selected && state.selected !== q.correct) cls += ' wrong';
+    } else if (state.selected === idx) {
+      cls += ' selected';
+    }
+
+    let icons = '';
+    if (state.showResult && idx === q.correct) {
+      icons = '<span class="check-icon">✓</span>';
+    } else if (state.showResult && idx === state.selected && idx !== q.correct) {
+      icons = '<span class="cross-icon">✗</span>';
+    }
+
+    optionsHtml += `
+      <button class="${cls}" data-idx="${idx}" ${state.showResult ? 'disabled' : ''}>
+        <span class="option-letter">${String.fromCharCode(65 + idx)}</span>
+        <span class="option-text">${opt}</span>
+        ${icons}
+      </button>
+    `;
+  });
+
+  const explanationHtml = state.showResult
+    ? `<div class="explanation"><strong>💡 ពន្យល់៖</strong> ${q.explanation}</div>`
+    : '';
+
+  const actionBtn = !state.showResult
+    ? `<button class="btn btn-primary" id="confirmBtn" ${state.selected === null ? 'disabled' : ''}>បញ្ជាក់ចម្លើយ</button>`
+    : `<button class="btn btn-success" id="nextBtn">${state.currentIdx + 1 >= total ? 'បញ្ចប់ និងមើលលទ្ធផល' : 'សំណួរបន្ទាប់ →'}</button>`;
+
+  mainEl.innerHTML = `
+    ${renderProgress()}
+    <div class="question-card">
+      <div class="category-badge">${q.category}</div>
+      <h3 class="question-text">${q.question}</h3>
+      <div class="options">${optionsHtml}</div>
+      ${explanationHtml}
+      <div class="quiz-actions">${actionBtn}</div>
+    </div>
+  `;
+
+  // Event listeners
+  mainEl.querySelectorAll('.option').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (state.showResult) return;
+      state.selected = parseInt(btn.dataset.idx, 10);
+      renderQuestion();
+    });
+  });
+
+  const confirmBtn = document.getElementById('confirmBtn');
+  if (confirmBtn) {
+    confirmBtn.addEventListener('click', () => {
+      if (state.selected === null) return;
+      state.showResult = true;
+      state.answers.push({ idx: state.currentIdx, selected: state.selected });
+      renderQuestion();
+    });
+  }
+
+  const nextBtn = document.getElementById('nextBtn');
+  if (nextBtn) {
+    nextBtn.addEventListener('click', () => {
+      if (state.currentIdx + 1 >= questions.length) {
+        state.isFinished = true;
+        renderResult();
+      } else {
+        state.currentIdx++;
+        state.selected = null;
+        state.showResult = false;
+        renderQuestion();
+      }
+    });
+  }
+
+  typesetMath();
+}
+
+function calculateScore() {
+  return state.answers.reduce((score, ans) => {
+    return score + (questions[ans.idx].correct === ans.selected ? 1 : 0);
+  }, 0);
+}
+
+function renderResult() {
+  const score = calculateScore();
+  const total = questions.length;
+  const pct = Math.round((score / total) * 100);
+
+  let message = '', emoji = '';
+  if (pct >= 80) { message = 'ពិតជាល្អណាស់! អ្នកពូកែរូបវិទ្យាណាស់ 🎉'; emoji = '🏆'; }
+  else if (pct >= 60) { message = 'ល្អ! ប៉ុន្តែអ្នកអាចធ្វើបានល្អជាងនេះទៀត។'; emoji = '👍'; }
+  else if (pct >= 40) { message = 'មធ្យម! សូមព្យាយាមម្តងទៀត។'; emoji = '📖'; }
+  else { message = 'ត្រូវខិតខំបន្ថែម! សូមអានរូបមន្តម្តងទៀត។'; emoji = '💪'; }
+
+  const circumference = 339.29;
+  const dash = (pct / 100) * circumference;
+
+  subtitleEl.textContent = `លទ្ធផលរបស់អ្នក`;
+
+  mainEl.innerHTML = `
+    <div class="result-card">
+      <div class="result-emoji">${emoji}</div>
+      <h2>លទ្ធផលរបស់អ្នក</h2>
+      <div class="score-circle">
+        <svg viewBox="0 0 120 120">
+          <circle cx="60" cy="60" r="54" class="score-bg" />
+          <circle cx="60" cy="60" r="54" class="score-progress"
+            stroke-dasharray="${dash} ${circumference}" />
+        </svg>
+        <div class="score-text">
+          <span class="score-num">${score}</span>
+          <span class="score-total">/ ${total}</span>
+        </div>
+      </div>
+      <p class="score-percentage">${pct}%</p>
+      <p class="result-message">${message}</p>
+      <div class="result-actions">
+        <button class="btn btn-primary" id="restartBtn">🔄 ធ្វើម្តងទៀត</button>
+        <button class="btn btn-secondary" id="reviewBtn">📝 ពិនិត្យចម្លើយ</button>
+      </div>
+    </div>
+  `;
+
+document.getElementById('restartBtn').addEventListener('click', restart);
+  document.getElementById('reviewBtn').addEventListener('click', () => {
+    state.isReview = true;
+    state.isFinished = false;
+    state.currentIdx = 0;
+    state.selected = null;
+    state.showResult = true;
+    renderReview();
+  });
+
+  typesetMath();
+}
+
+function renderReview() {
+  subtitleEl.textContent = 'ពិនិត្យចម្លើយ';
+
+  let itemsHtml = '';
+  questions.forEach((q, idx) => {
+    const ans = state.answers.find(a => a.idx === idx);
+    const userSelected = ans ? ans.selected : -1;
+    const isCorrect = userSelected === q.correct;
+
+    let optsHtml = '';
+    q.options.forEach((opt, i) => {
+      let cls = 'review-opt';
+      if (i === q.correct) cls += ' correct';
+      else if (i === userSelected) cls += ' wrong';
+      optsHtml += `<div class="${cls}"><strong>${String.fromCharCode(65 + i)}.</strong> ${opt}</div>`;
+    });
+
+    itemsHtml += `
+      <div class="review-item">
+        <div class="review-header">
+          <span class="review-num">សំណួរទី ${idx + 1}</span>
+          <span class="review-status ${isCorrect ? 'correct' : 'wrong'}">
+            ${isCorrect ? '✓ ត្រឹមត្រូវ' : '✗ ខុស'}
+          </span>
+        </div>
+        <p class="review-question">${q.question}</p>
+        <div class="review-options">${optsHtml}</div>
+        <div class="explanation"><strong>💡 ពន្យល់៖</strong> ${q.explanation}</div>
+      </div>
+    `;
+  });
+
+  mainEl.innerHTML = `
+    <div class="review-container">
+      <h2 class="review-title">📝 ពិនិត្យចម្លើយ</h2>
+      ${itemsHtml}
+      <button class="btn btn-primary" id="restartBtn" style="width:100%;">🔄 ចាប់ផ្តើមឡើងវិញ</button>
+    </div>
+  `;
+
+  document.getElementById('restartBtn').addEventListener('click', restart);
+  typesetMath();
+}
+
+function restart() {
+  state.currentIdx = 0;
+  state.selected = null;
+  state.answers = [];
+  state.showResult = false;
+  state.isFinished = false;
+  state.isReview = false;
+  subtitleEl.textContent = `សូមជ្រើសរើសចម្លើយត្រឹមត្រូវខាងក្រោម | មានចំនួន ${questions.length} សំណួរ`;
+  renderQuestion();
+}
+
+/* ============ ចាប់ផ្តើម ============ */
+subtitleEl.textContent = `សូមជ្រើសរើសចម្លើយត្រឹមត្រូវខាងក្រោម | មានចំនួន ${questions.length} សំណួរ`;
+renderQuestion();
+</script>
+
+</body>
+</html>

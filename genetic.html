@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>រូបមន្តរូបវិទ្យា - ឧស្ម័ន</title>
+    <!-- MathJax for rendering LaTeX formulas -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Khmer OS', 'Khmer OS Battambang', 'Noto Sans Khmer', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #1e2a3a;
+            line-height: 1.7;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(10px);
+            border-radius: 28px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            padding: 30px 35px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #0b3d5c;
+            margin-bottom: 8px;
+            padding-bottom: 15px;
+            border-bottom: 4px solid #4a90e2;
+            letter-spacing: 0.5px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
+        }
+
+        .subtitle {
+            text-align: center;
+            font-size: 1rem;
+            color: #4a6a8a;
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+
+        .section {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 22px 28px;
+            margin-bottom: 28px;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+            border-left: 6px solid #4a90e2;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.1);
+        }
+
+        .section h2 {
+            font-size: 1.5rem;
+            color: #0b3d5c;
+            margin-bottom: 18px;
+            padding-bottom: 8px;
+            border-bottom: 2px dashed #b0c8e0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section h2 .num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: #4a90e2;
+            color: white;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            font-size: 1rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .formula-block {
+            background: #f0f7ff;
+            border-radius: 12px;
+            padding: 14px 20px;
+            margin: 12px 0;
+            border-left: 4px solid #4a90e2;
+            overflow-x: auto;
+            font-size: 1.05rem;
+        }
+
+        .formula-block .label {
+            font-weight: 600;
+            color: #0b3d5c;
+            margin-bottom: 6px;
+            font-size: 0.95rem;
+        }
+
+        .symbol-list {
+            list-style: none;
+            padding: 0;
+            margin: 10px 0 0 0;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 8px;
+        }
+
+        .symbol-list li {
+            background: #f8fafd;
+            padding: 10px 16px;
+            border-radius: 10px;
+            border: 1px solid #dde7f0;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: baseline;
+            gap: 6px;
+            font-size: 0.98rem;
+            transition: background 0.2s;
+        }
+
+        .symbol-list li:hover {
+            background: #eaf2fb;
+        }
+
+        .symbol-list li strong {
+            color: #1a5a8a;
+            min-width: 80px;
+            font-weight: 700;
+        }
+
+        .unit {
+            color: #2a7a4a;
+            font-weight: 600;
+            background: #e6f5ec;
+            padding: 1px 10px;
+            border-radius: 20px;
+            font-size: 0.88rem;
+            margin-left: 4px;
+            white-space: nowrap;
+        }
+
+        .note {
+            font-size: 0.9rem;
+            color: #5a6a7a;
+            margin-top: 8px;
+            padding: 8px 14px;
+            background: #fdf6e3;
+            border-radius: 8px;
+            border-left: 3px solid #e6a817;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        @media (max-width: 700px) {
+            .container {
+                padding: 18px 16px;
+            }
+            h1 {
+                font-size: 1.6rem;
+            }
+            .section {
+                padding: 16px 18px;
+            }
+            .section h2 {
+                font-size: 1.2rem;
+            }
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+            .symbol-list li {
+                flex-direction: column;
+                gap: 2px;
+            }
+            .symbol-list li strong {
+                min-width: auto;
+            }
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #d0dce8;
+            color: #6a7a8a;
+            font-size: 0.9rem;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #4a90e2;
+            color: white;
+            border-radius: 20px;
+            padding: 2px 14px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-left: 8px;
+            letter-spacing: 0.3px;
+        }
+
+        .constant-highlight {
+            background: #fff8e1;
+            border-radius: 8px;
+            padding: 10px 16px;
+            margin: 8px 0;
+            border: 1px solid #f0d88a;
+        }
+
+        .constant-highlight strong {
+            color: #b06a00;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>📘 រូបមន្តរូបវិទ្យា៖ ឧស្ម័ន</h1>
+    <p class="subtitle">ស្រង់ និងរៀបចំរូបមន្ត ឈ្មោះនិមិត្តសញ្ញា និងការបំបែកខ្នាតតាមចំណុចនីមួយៗ</p>
+
+    <!-- ១. ទំនាក់ទំនងសម្ពាធ ម៉ាសមាឌ និងល្បឿនមធ្យម -->
+    <div class="section">
+        <h2><span class="num">១</span> ទំនាក់ទំនងសម្ពាធ ម៉ាសមាឌ និងល្បឿនមធ្យម <span class="badge">Pressure &amp; Speed</span></h2>
+
+        <div class="formula-block">
+            <div class="label">📌 រូបមន្តសម្ពាធ៖</div>
+            <p>\[
+            P = \frac{1}{3} \frac{N}{V} m_0 V_{av}^2 
+            = \frac{2}{3} \frac{N}{V} \left(\frac{1}{2} m_0 V_{av}^2\right) 
+            = \frac{2}{3} \frac{N}{V} K_{av}
+            \]</p>
+            <p>\[
+            P = \frac{1}{3} \rho V_{av}^2
+            \]</p>
+        </div>
+
+        <div class="label" style="font-weight:600; color:#0b3d5c; margin-top:16px;">📋 ឈ្មោះនិមិត្តសញ្ញា និងខ្នាត៖</div>
+        <ul class="symbol-list">
+            <li><strong>\(P\)</strong> ៖ សម្ពាធឧស្ម័ន <span class="unit">Pa ឬ N/m²</span></li>
+            <li><strong>\(m\)</strong> ៖ ម៉ាសឧស្ម័ន <span class="unit">kg</span></li>
+            <li><strong>\(m_0\)</strong> ៖ ម៉ាសឧស្ម័ន ១ ម៉ូលេគុល <span class="unit">kg</span></li>
+            <li><strong>\(V_{av}\)</strong> ៖ ល្បឿនមធ្យម <span class="unit">m/s</span></li>
+            <li><strong>\(K_{av}\)</strong> ៖ ថាមពលស៊ីនេទិចមធ្យម <span class="unit">J</span></li>
+            <li><strong>\(N\)</strong> ៖ ចំនួនម៉ូលេគុល <span class="unit">គ្មានខ្នាត</span></li>
+            <li><strong>\(\rho\)</strong> ៖ ម៉ាសមាឌឧស្ម័ន <span class="unit">kg/m³</span></li>
+        </ul>
+    </div>
+
+    <!-- ២. ការបំបែកខ្នាតសម្ពាធ -->
+    <div class="section">
+        <h2><span class="num">២</span> ការបំបែកខ្នាតសម្ពាធ និងពហុគុណ <span class="badge">Pressure Conversions</span></h2>
+
+        <div class="formula-block">
+            <div class="label">📌 សម្ពាធបរិយាកាស៖</div>
+            <p>\[
+            P = 10^5\text{ Pa} = 1\text{ atm} = 760\text{ mmHg}
+            \]</p>
+        </div>
+
+        <div class="formula-block">
+            <div class="label">📌 ពហុគុណនៃ បាស្កាល់ (\(Pa\))៖</div>
+            <div class="grid-2">
+                <p>\[ 1\text{ kPa} = 10^3\text{ Pa} \]</p>
+                <p>\[ 1\text{ MPa} = 10^6\text{ Pa} \]</p>
+                <p>\[ 1\text{ GPa} = 10^9\text{ Pa} \]</p>
+                <p>\[ 1\text{ TPa} = 10^{12}\text{ Pa} \]</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ៣. សមីការឧស្ម័នបរិសុទ្ធ និងថេរ -->
+    <div class="section">
+        <h2><span class="num">៣</span> សមីការឧស្ម័នបរិសុទ្ធ និងថេរ <span class="badge">Ideal Gas Law</span></h2>
+
+        <div class="formula-block">
+            <div class="label">📌 រូបមន្ត៖</div>
+            <p>\[ PV = N k_B T \]</p>
+            <p>\[ PV = n R T \]</p>
+        </div>
+
+        <div class="label" style="font-weight:600; color:#0b3d5c; margin-top:16px;">📋 តម្លៃថេរ និងខ្នាត៖</div>
+        <div class="constant-highlight">
+            <p><strong>\(k_B\)</strong> ៖ ថេរ Boltzmann \(= 1.38 \times 10^{-23}\text{ J/K}\)</p>
+            <p><strong>\(N_A\)</strong> ៖ ចំនួនអាវ៉ូហ្គាដ្រូ \(= 6.23 \times 10^{23}\text{ mol}^{-1}\)</p>
+            <p><strong>\(R\)</strong> ៖ ថេរឧស្ម័នបរិសុទ្ធ \(= N_A \times k_B = 8.31\text{ J/(mol·K)}\)</p>
+        </div>
+    </div>
+
+    <!-- ៤. សមីការភាពនៃឧស្ម័ន -->
+    <div class="section">
+        <h2><span class="num">៤</span> សមីការភាពនៃឧស្ម័ន <span class="badge">Gas Laws</span></h2>
+
+        <div class="formula-block">
+            <div class="label">📌 រូបមន្តទូទៅ៖</div>
+            <p>\[ \frac{P_1 V_1}{T_1} = \frac{P_2 V_2}{T_2} \]</p>
+        </div>
+
+        <div class="grid-2">
+            <div class="formula-block">
+                <div class="label">ច្បាប់សាល (\(P\) ថេរ)៖</div>
+                <p>\[ \frac{V_1}{T_1} = \frac{V_2}{T_2} \]</p>
+            </div>
+            <div class="formula-block">
+                <div class="label">ច្បាប់ប៊យ (\(T\) ថេរ)៖</div>
+                <p>\[ P_1 V_1 = P_2 V_2 \]</p>
+            </div>
+            <div class="formula-block">
+                <div class="label">ច្បាប់គេលុយសាក់ (\(V\) ថេរ)៖</div>
+                <p>\[ \frac{P_1}{T_1} = \frac{P_2}{T_2} \]</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ៥. រូបមន្តបន្ថែមសម្រាប់គណនាបរិមាណឧស្ម័ន -->
+    <div class="section">
+        <h2><span class="num">៥</span> រូបមន្តបន្ថែមសម្រាប់គណនាបរិមាណឧស្ម័ន <span class="badge">Additional Formulas</span></h2>
+
+        <div class="grid-2">
+            <div class="formula-block">
+                <div class="label">ចំនួនម៉ូល៖</div>
+                <p>\[ n = \frac{m}{M} = \frac{V}{V_m} \]</p>
+            </div>
+            <div class="formula-block">
+                <div class="label">ចំនួនម៉ូលេគុល៖</div>
+                <p>\[ N = n N_A = \frac{m}{m_0} \]</p>
+            </div>
+            <div class="formula-block">
+                <div class="label">ម៉ាស ១ ម៉ូលេគុល៖</div>
+                <p>\[ m_0 = \frac{M}{N_A} \]</p>
+            </div>
+            <div class="formula-block">
+                <div class="label">ម៉ាសមាឌ៖</div>
+                <p>\[ \rho = \frac{m}{V} \]</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ៦. ថាមពលស៊ីនេទិចនៃឧស្ម័ន -->
+    <div class="section">
+        <h2><span class="num">៦</span> ថាមពលស៊ីនេទិចនៃឧស្ម័ន <span class="badge">Kinetic Energy</span></h2>
+
+        <div class="formula-block">
+            <div class="label">📌 ថាមពលស៊ីនេទិចមធ្យមនៃ ១ ម៉ូលេគុល (\(K_{av}\))៖</div>
+            <p>\[ K_{av} = \frac{3}{2} k_B T \quad \text{(J)} \]</p>
+        </div>
+
+        <div class="formula-block">
+            <div class="label">📌 ថាមពលស៊ីនេទិចសរុបនៃ \(N\) ម៉ូលេគុល (\(K\))៖</div>
+            <p>\[ K = N K_{av} = \frac{3}{2} N k_B T = \frac{3}{2} PV = \frac{3}{2} n RT \]</p>
+        </div>
+    </div>
+
+    <!-- ៧. ល្បឿនមធ្យម ឬល្បឿនប្រសិទ្ធភាព -->
+    <div class="section">
+        <h2><span class="num">៧</span> ល្បឿនមធ្យម ឬល្បឿនប្រសិទ្ធភាព <span class="badge">Average Speed</span></h2>
+
+        <div class="formula-block">
+            <div class="label">📌 រូបមន្ត៖</div>
+            <p>\[ V_{av} = \sqrt{\frac{3 k_B T}{m_0}} \]</p>
+            <p>\[ V_{av} = \sqrt{\frac{3 R T}{M}} \]</p>
+        </div>
+
+        <div class="symbol-list">
+            <li><strong>\(V_{av}\)</strong> ៖ ល្បឿនមធ្យម <span class="unit">m/s</span></li>
+        </div>
+    </div>
+
+    <div class="footer">
+        <a href="pyscript.html">
+        📚 ចុចត្រង់នេះដើម្បីអនុវត្ត
+        </a>
+    </div>
+</div>
+    <script>
+      (function(){
+    function detectDeviceName(){
+      const ua = navigator.userAgent;
+      let os = 'Unknown';
+      if(/android/i.test(ua)) os = 'Android';
+      else if(/iphone|ipad|ipod/i.test(ua)) os = 'iOS';
+      else if(/windows/i.test(ua)) os = 'Windows';
+      else if(/mac os/i.test(ua)) os = 'macOS';
+      else if(/linux/i.test(ua)) os = 'Linux';
+
+      let browser = 'Browser';
+      if(/vivo/i.test(ua)) browser = 'ViVo';
+      else if(/samsung/i.test(ua)) browser = 'Samsung';
+      else if(/edg/i.test(ua)) browser = 'Edge';
+      else if(/chrome/i.test(ua)) browser = 'Chrome';
+      else if(/firefox/i.test(ua)) browser = 'Firefox';
+      else if(/safari/i.test(ua)) browser = 'Safari';
+
+      return `${browser}-${os}`;
+    }
+
+    function saveEntry(ip){
+      try{
+        const page = location.pathname.split('/').pop().replace('.html','');
+        const time = new Date().toLocaleString();
+        const device = detectDeviceName();
+        let entries = JSON.parse(localStorage.getItem('visitLog') || '[]');
+        entries.push({ page: page, time: time, device: device, ip: ip });
+        if(entries.length > 300) entries = entries.slice(-300);
+        localStorage.setItem('visitLog', JSON.stringify(entries));
+      }catch(e){}
+    }
+
+    fetch('https://api.ipify.org?format=json')
+      .then(r => r.json())
+      .then(data => saveEntry(data.ip))
+      .catch(() => saveEntry('unknown'));
+  })();
+    </script>
+</body>
+</html>
